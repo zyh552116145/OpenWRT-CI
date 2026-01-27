@@ -76,3 +76,16 @@ if [ -d *"luci-app-netspeedtest"* ]; then
 
 	cd $PKG_PATH && echo "netspeedtest has been fixed!"
 fi
+
+#修复kmod-nf-conntrack6依赖缺失
+echo "Fixing kmod-nf-conntrack6 dependency..."
+find ../feeds/packages/ -type f -name "Makefile" -exec sed -i 's/kmod-nf-conntrack6/kmod-nf-conntrack/g' {} +
+echo "kmod-nf-conntrack6 dependency has been fixed!"
+
+#修复luci-app-advanced-reboot依赖
+AD_REBOOT_FILE=$(find ../feeds/luci/ -type f -name "Makefile" | grep "luci-app-advanced-reboot")
+if [ -f "$AD_REBOOT_FILE" ]; then
+    echo "Fixing luci-app-advanced-reboot dependency..."
+    sed -i 's/jq\/host/jq/g' $AD_REBOOT_FILE
+    echo "luci-app-advanced-reboot has been fixed!"
+fi
